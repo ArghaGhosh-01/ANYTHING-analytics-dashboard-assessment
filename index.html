@@ -100,16 +100,7 @@
       padding: 20px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
       transition: transform 0.2s ease-in-out;
-      height: 400px;
       overflow: hidden;
-    }
-
-    .chart-box.full-width {
-      grid-column: span 4;
-    }
-
-    .head-color {
-      color: #8E2DE2;
     }
 
     .chart-box:hover {
@@ -122,6 +113,24 @@
       font-size: 1.2rem;
       color: var(--primary);
       text-align: center;
+    }
+
+    .chart-box .chart-wrapper {
+      height: 300px;
+      width: 100%;
+      position: relative;
+    }
+
+    .chart-box.line-chart {
+      grid-column: span 4;
+    }
+
+    .chart-box.line-chart .chart-wrapper {
+      height: 400px;
+    }
+
+    .head-color {
+      color: #8E2DE2;
     }
 
     @media (min-width: 768px) {
@@ -153,8 +162,13 @@
 
       function createChart(type, title, labels, data, container, isLineChart) {
         const chartBox = document.createElement('div');
-        chartBox.className = 'chart-box' + (isLineChart ? ' full-width' : '');
-        chartBox.innerHTML = `<h3>${title} (${type})</h3><canvas style="height: 300px;"></canvas>`;
+        chartBox.className = 'chart-box' + (isLineChart ? ' line-chart' : '');
+        chartBox.innerHTML = `
+          <h3>${title} (${type})</h3>
+          <div class="chart-wrapper">
+            <canvas></canvas>
+          </div>
+        `;
         container.appendChild(chartBox);
 
         const ctx = chartBox.querySelector('canvas');
@@ -185,17 +199,23 @@
           options: {
             responsive: true,
             maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: type === 'pie' || type === 'doughnut' ? 'bottom' : 'top',
+                labels: {
+                  color: '#fff'
+                }
+              }
+            },
             scales: type === 'bar' || type === 'line' ? {
               y: {
                 beginAtZero: true,
-                grid: {
-                  color: 'rgba(255, 255, 255, 0.1)'
-                }
+                ticks: { color: '#fff' },
+                grid: { color: 'rgba(255, 255, 255, 0.1)' }
               },
               x: {
-                grid: {
-                  color: 'rgba(255, 255, 255, 0.1)'
-                }
+                ticks: { color: '#fff' },
+                grid: { color: 'rgba(255, 255, 255, 0.1)' }
               }
             } : {}
           }
@@ -237,10 +257,8 @@
               const data = results.data;
               const headers = Object.keys(data[0]);
               headers.forEach(h => {
-                const opt1 = new Option(h, h);
-                const opt2 = new Option(h, h);
-                param1.appendChild(opt1);
-                param2.appendChild(opt2);
+                param1.appendChild(new Option(h, h));
+                param2.appendChild(new Option(h, h));
               });
               param1.value = 'Make';
               param2.value = 'Model Year';
