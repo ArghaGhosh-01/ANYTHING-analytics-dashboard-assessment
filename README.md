@@ -1,6 +1,6 @@
 # 📊 Analytics Dashboard
 
-![Dashboard Screenshot](https://your-image-url.com/preview.png) <!-- Replace with your own image link or local image path -->
+![Dashboard Screenshot](screen.png) <!-- Replace with your own image link or local image path -->
 
 An interactive and responsive analytics dashboard built with **HTML**, **CSS**, and **JavaScript**. It visualizes data from a CSV file using multiple chart types powered by [Chart.js](https://www.chartjs.org/) and supports dynamic filtering by user-selected parameters.
 
